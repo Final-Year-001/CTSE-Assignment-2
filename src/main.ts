@@ -3,6 +3,7 @@ import cors from "cors";
 import Config from "./config";
 import router from "./routes";
 
+const ok = []
 const app = express();
 
 app.use(express.json({ limit: "10mb" }));
