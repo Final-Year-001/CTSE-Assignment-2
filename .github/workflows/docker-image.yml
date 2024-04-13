@@ -13,12 +13,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
     - name: Build the Docker image
+      uses: actions/checkout@v3
       with:
-            registry: nsfwregistry.azurecr.io
-            username: ${{ secrets.DOCKER_USERNAME }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: nsfwregistry.azurecr.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - run: |
         docker build . --file Dockerfile --tag nsfwregistry.azurecr.io/ctse/ctse-assignment-2:latest
         docker push nsfwregistry.azurecr.io/ctse/ctse-assignment-2:latest
