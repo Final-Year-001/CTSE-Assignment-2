@@ -1,10 +1,12 @@
 import { Request, Response } from "express";
 import Song from "../models/song";
+import { sanitize } from "express-mongo-sanitize";
+
 
 // Controller function to create a new song
 export const createSong = async (req: Request, res: Response) => {
   try {
-    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = req.body;
+    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = sanitize(req.body);
 
     const newSong = new Song({
       title,
@@ -39,7 +41,7 @@ export const getSongById = async (req: Request, res: Response) => {
 // Controller function to update song information by ID
 export const updateSong = async (req: Request, res: Response) => {
   try {
-    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = req.body;
+    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = sanitize(req.body);
 
     const updatedSong = await Song.findByIdAndUpdate(
       req.params.songId,
@@ -60,7 +62,7 @@ export const updateSong = async (req: Request, res: Response) => {
 // Controller function to delete a song by ID
 export const deleteSong = async (req: Request, res: Response) => {
   try {
-    const deletedSong = await Song.findByIdAndDelete(req.params.songId);
+    const deletedSong = await Song.findByIdAndDelete(sanitize(req.params).songId);
     if (!deletedSong) {
       return res.status(404).json({ message: "Song not found" });
     }
@@ -73,11 +75,13 @@ export const deleteSong = async (req: Request, res: Response) => {
 // Controller function to search for songs by keyword
 export const searchSongs = async (req: Request, res: Response) => {
   try {
-    if (typeof req.query.q !== "string") {
+    const sanitizedQuery = sanitize(req.query);
+
+    if (typeof sanitizedQuery.q !== "string") {
       return res.status(400).json({ message: "Bad Request" });
     }
 
-    const query: string = req.query.q || "";
+    const query: string = sanitizedQuery.q || "";
     const songs = await Song.find({ $text: { $search: query } });
     res.json(songs);
   } catch (error: any) {

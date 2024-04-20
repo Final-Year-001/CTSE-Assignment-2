@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import Playlist from "../models/playlist";
+import { sanitize } from "express-mongo-sanitize";
 
 // Controller function to create a new playlist
 export const createPlaylist = async (req: Request, res: Response) => {
   try {
-    const { name, description, createdBy } = req.body;
+    const { name, description, createdBy } = sanitize(req.body);
 
     const newPlaylist = new Playlist({
       name,
@@ -23,7 +24,7 @@ export const createPlaylist = async (req: Request, res: Response) => {
 // Controller function to retrieve a specific playlist by ID
 export const getPlaylistById = async (req: Request, res: Response) => {
   try {
-    const playlist = await Playlist.findById(req.params.playlistId).populate("songs");
+    const playlist = await Playlist.findById(sanitize(req.params).playlistId).populate("songs");
     if (!playlist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
@@ -36,7 +37,7 @@ export const getPlaylistById = async (req: Request, res: Response) => {
 // Controller function to update playlist details by ID
 export const updatePlaylist = async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
+    const { name, description } = sanitize(req.body);
 
     const updatedPlaylist = await Playlist.findByIdAndUpdate(
       req.params.playlistId,
@@ -57,7 +58,7 @@ export const updatePlaylist = async (req: Request, res: Response) => {
 // Controller function to delete a playlist by ID
 export const deletePlaylist = async (req: Request, res: Response) => {
   try {
-    const deletedPlaylist = await Playlist.findByIdAndDelete(req.params.playlistId);
+    const deletedPlaylist = await Playlist.findByIdAndDelete(sanitize(req.params).playlistId);
     if (!deletedPlaylist) {
       return res.status(404).json({ message: "Playlist not found" });
     }
@@ -70,8 +71,8 @@ export const deletePlaylist = async (req: Request, res: Response) => {
 // Controller function to add a song to a playlist
 export const addSongToPlaylist = async (req: Request, res: Response) => {
   try {
-    const { playlistId } = req.params;
-    const { songId } = req.body;
+    const { playlistId } = sanitize(req.params);
+    const { songId } = sanitize(req.body);
 
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
@@ -92,8 +93,8 @@ export const addSongToPlaylist = async (req: Request, res: Response) => {
 // Controller function to remove songs from a playlist
 export const removeSongsFromPlaylist = async (req: Request, res: Response) => {
   try {
-    const { playlistId } = req.params;
-    const { songIds } = req.body;
+    const { playlistId } = sanitize(req.params);
+    const { songIds } = sanitize(req.body);
 
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
