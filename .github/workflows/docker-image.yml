@@ -35,4 +35,4 @@ jobs:
 
     - name: Update Deployment
       run: |
-        kubectl set image deployment/ctse-assignment-2 ctse-assignment-2=nsfwregistry.azurecr.io/ctse/ctse-assignment-2:latest --namespace default-1713085409400
+        kubectl rollout restart deployment/ctse-assignment-2 --namespace default-1713085409400
