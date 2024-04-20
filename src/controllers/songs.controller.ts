@@ -81,6 +81,7 @@ export const searchSongs = async (req: Request, res: Response) => {
     const songs = await Song.find({ $text: { $search: query } });
     res.json(songs);
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -13,6 +13,7 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
   console.log("Connected to MongoDB");
+  // db.collection('songs').createIndex({ title: "text", artist: "text", album:"text", genre: "text"})
 });
 
 app.use(express.json({ limit: "10mb" }));

@@ -10,9 +10,9 @@ import {
 const songRouter = express.Router();
 
 songRouter.post("/", createSong);
+songRouter.get("/search", searchSongs);
 songRouter.get("/:songId", getSongById);
 songRouter.put("/:songId", updateSong);
 songRouter.delete("/:songId", deleteSong);
-songRouter.get("/search", searchSongs);
 
 export default songRouter;
