@@ -30,6 +30,7 @@ jobs:
       env:
         KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
       run: |
+        mkdir $HOME/.kube/
         echo "$KUBECONFIG" | base64 --decode > $HOME/.kube/config
 
     - name: Update Deployment
