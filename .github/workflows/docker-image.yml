@@ -26,3 +26,13 @@ jobs:
         docker build . --file Dockerfile --tag nsfwregistry.azurecr.io/ctse/ctse-assignment-2:latest
         docker push nsfwregistry.azurecr.io/ctse/ctse-assignment-2:latest
     
+    - name: Configure Kubernetes
+      env:
+        KUBECONFIG: ${{ secrets.KUBE_CONFIG }}
+      run: |
+        mkdir $HOME/.kube/
+        echo "$KUBECONFIG" | base64 --decode > $HOME/.kube/config
+
+    - name: Update Deployment
+      run: |
+        kubectl rollout restart deployment/ctse-assignment-2 --namespace default-1713085409400
