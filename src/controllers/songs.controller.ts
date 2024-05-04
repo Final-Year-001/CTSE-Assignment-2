@@ -2,11 +2,19 @@ import { Request, Response } from "express";
 import Song from "../models/song";
 import { sanitize } from "express-mongo-sanitize";
 
-
+// nisal check
 // Controller function to create a new song
 export const createSong = async (req: Request, res: Response) => {
   try {
-    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = sanitize(req.body);
+    const {
+      title,
+      artist,
+      album,
+      durationInSeconds,
+      filePath,
+      genre,
+      releaseDate,
+    } = sanitize(req.body);
 
     const newSong = new Song({
       title,
@@ -41,7 +49,15 @@ export const getSongById = async (req: Request, res: Response) => {
 // Controller function to update song information by ID
 export const updateSong = async (req: Request, res: Response) => {
   try {
-    const { title, artist, album, durationInSeconds, filePath, genre, releaseDate } = sanitize(req.body);
+    const {
+      title,
+      artist,
+      album,
+      durationInSeconds,
+      filePath,
+      genre,
+      releaseDate,
+    } = sanitize(req.body);
 
     const updatedSong = await Song.findByIdAndUpdate(
       req.params.songId,
@@ -62,7 +78,9 @@ export const updateSong = async (req: Request, res: Response) => {
 // Controller function to delete a song by ID
 export const deleteSong = async (req: Request, res: Response) => {
   try {
-    const deletedSong = await Song.findByIdAndDelete(sanitize(req.params).songId);
+    const deletedSong = await Song.findByIdAndDelete(
+      sanitize(req.params).songId
+    );
     if (!deletedSong) {
       return res.status(404).json({ message: "Song not found" });
     }
